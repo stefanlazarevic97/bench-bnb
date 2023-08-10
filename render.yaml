@@ -1,6 +1,6 @@
 databases:
   - name: bench-bnb
-    user: stefan-lazarevic
+    user: bench-bnb
     plan: free
     region: oregon
 
