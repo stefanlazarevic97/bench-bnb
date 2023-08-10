@@ -10,6 +10,16 @@ export const ADD_BENCH = 'benches/addBench';
 export const setBenches = benches => ({ type: SET_BENCHES, payload: benches });
 export const addBench = bench => ({ type: ADD_BENCH, payload: bench });
 
+// SELECTORS 
+
+export const getBenches = state => {
+    return state.benches ? Object.values(state.benches) : [];
+}
+
+export const getBench = benchId => state => {
+    return state.benches ? state.benches[benchId] : null;
+}
+
 // THUNK ACTION CREATORS
 
 export const fetchBenches = () => async dispatch => {

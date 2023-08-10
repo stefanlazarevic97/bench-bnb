@@ -24,9 +24,7 @@ export default function Navigation() {
     
     return (
         <ul>
-            <li>
-                <NavLink exact to="/">Home</NavLink>
-            </li>
+            <NavLink exact to="/">Home</NavLink>
             {sessionLinks}
         </ul>
     )    
