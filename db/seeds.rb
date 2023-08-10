@@ -35,5 +35,17 @@ ApplicationRecord.transaction do
         }) 
     end
 
+    puts "Creating benches..."
+
+    # Create benches
+
+    benches = Bench.create!([
+        { title: "Ina Coolbrith Park", description: "Nice view of SF", price: 73, seating: 2, lat: 37.798262, lng: -122.413332},
+        { title: "Lafayette Park", description: "Great space for picnics and scenic views", price: 42, seating: 8, lat: 37.791817, lng: -122.427464},
+        { title: "Marina Green", description: "Right on the ocean! Very windy.", price: 29, seating: 4, lat: 37.807204, lng: -122.438348},
+        { title: "Color Fountain Park Bench", description: 'Enjoy sitting in with shops nearby', price: 20, seating: 2, lat: 37.7824481, lng: -122.4334947},
+        { title: "Golden Gate Park Bench", description: 'Right by a lake', price: 99, seating: 4, lat: 37.7715512, lng: -122.4934478}
+    ])
+
     puts "Done!"
 end
