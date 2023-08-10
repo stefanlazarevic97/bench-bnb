@@ -15,17 +15,17 @@ export default function BenchShowPage() {
     return (
         <div>
             <header>
-                <h2>{bench.title}</h2>
+                <h2>{bench?.title}</h2>
                 <Link to="/">Back to Bench Index Page</Link>
             </header>
 
             <section>
                 <h3>Details</h3>
-                <p>Description: {bench.description}</p>
+                <p>Description: {bench?.description}</p>
 
                 <ul>
-                    <li># of seats: {bench.seating}</li>
-                    <li>Location: {bench.lat}, {bench.lng}</li>
+                    <li># of seats: {bench?.seating}</li>
+                    <li>Location: {bench?.lat}, {bench?.lng}</li>
                 </ul>
             </section>
         </div>

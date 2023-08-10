@@ -50,6 +50,7 @@ export const createBench = benchData => async dispatch => {
     if (res.ok) {
         const newBench = await res.json();
         dispatch(addBench(newBench));
+        return newBench;
     }
 }
 
