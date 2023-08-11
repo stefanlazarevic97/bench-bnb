@@ -3,12 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import * as sessionActions from "../../store/session";
 import './LoginForm.css';
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import { useInput, useSubmit } from "../../hooks";
+import { FormErrors, Input } from "../Forms";
 
 export default function LoginFormPage() {
     const dispatch = useDispatch();
     const sessionUser = useSelector(state => state.session.user);
-    const [credential, setCredential] = useState('');
-    const [password, setPassword] = useState('');
+    const [credential, onCredentialChange] = useInput('');
+    const [password, onPasswordChange] = useInput('');
+
+    // const [errors, handleSubmit] = useSubmit({
+    //     createAction: () => sessionActions.login({ credential, password }),
+    //     // onSuccess
+    // })
+    
     const [errors, setErrors] = useState([]);
     
     if (sessionUser) return <Redirect to="/" />;
@@ -42,26 +50,22 @@ export default function LoginFormPage() {
             <h1>Log In</h1>
             
             <form onSubmit={handleSubmit}>
-                <ul>
-                    {errors.map(error => <li key={error}>{error}</li>)}
-                </ul>
-                <label>Username or Email: 
-                    <input
-                        type="text"
-                        value={credential}
-                        onChange={(e) => setCredential(e.target.value)}
-                        required
-                    />
-                </label>
+                <FormErrors errors={errors} />
+                
+                <Input
+                    label="Username or Email: "
+                    value={credential}
+                    onChange={onCredentialChange}
+                    required
+                />
 
-                <label>Password 
-                    <input 
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </label>
+                <Input
+                    label="Password: "
+                    type="password"
+                    value={password}
+                    onChange={onPasswordChange}
+                    required
+                />
 
                 <button>Log In</button>
             </form>

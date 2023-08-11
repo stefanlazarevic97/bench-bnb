@@ -1,112 +1,94 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 // import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { createBench } from "../../store/benches";
+import { useInput, useSubmit } from "../../hooks";
+import { FormErrors, Input, TextArea } from "../Forms";
 
 export default function BenchForm() {
-    const dispatch = useDispatch();
+    const history = useHistory();
     // const location = useLocation();
     const currentUser = useSelector(state => state.session.user);
 
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState(50);
-    const [description, setDescription] = useState('');
-    const [seating, setSeating] = useState(2);
-    const [lat, setLat] = useState(0);
-    const [lng, setLng] = useState(0);
+    const [title, onTitleChange] = useInput('');
+    const [price, onPriceChange] = useInput(50);
+    const [description, onDescriptionChange] = useInput('');
+    const [seating, onSeatingChange] = useInput(2);
+    const [lat, onLatChange] = useInput(0);
+    const [lng, onLngChange] = useInput(0);
     
-    const [errors, setErrors] = useState([]);
-    
-    if (!currentUser) return <Redirect to="/" />;
+    const [errors, onSubmit] = useSubmit({
+        createAction: () => {
+            const formData = { title, price, description, seating, lat, lng };
+            return createBench(formData);
+        },
+
+        onSuccess: () => history.push("/")
+    });
+
+    if (!currentUser) return history.push("/");
 
     // const searchParams = new URLSearchParams(location.search);
     // const lat = searchParams.get('lat');
     // const lng = searchParams.get('lng');
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const formData = {title, price, description, seating, lat, lng};
-
-        const res = await dispatch(createBench(formData));
-
-        if (res.errors) {
-            setErrors(res.errors);
-        } else {
-            <Redirect to="/" />;
-        }
-
-        setTitle('');
-        setPrice(50);
-        setDescription('');
-        setSeating(2);
-        setLat(0);
-        setLng(0);
-    }
-
+    
     return (
-        <form onSubmit={handleSubmit}>
-            <label>Title: 
-                <input 
-                    type="text" 
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Title"
-                />
-            </label>
-
-            <label>Price:
-                <input
-                    type="number"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    placeholder="Price"
-                />
-            </label>
-
-            <label>Description:
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Description"
-                />
-            </label>
-
-            <label>Seating:
-                <input
-                    type="number"
-                    value={seating}
-                    onChange={(e) => setSeating(e.target.value)}
-                    placeholder="Seating"
-                />
-            </label>
-
-            <label>Latitude:
-                <input
-                    type="number"
-                    value={lat}
-                    onChange={(e) => setLat(e.target.value)}
-                    placeholder="Latitude"
-                />
-            </label>            
+        <form onSubmit={onSubmit}>
+            <FormErrors errors={errors} />
             
-            <label>Longitude:
-                <input
-                    type="number"
-                    value={lng}
-                    onChange={(e) => setLng(e.target.value)}
-                    placeholder="Longitude"
-                />
-            </label>
+            <Input
+                label="Title: "
+                value={title}
+                onChange={onTitleChange}
+                placeholder="Title"
+                required
+            />
+
+            <Input
+                label="Price: "
+                type="number"
+                value={price}
+                onChange={onPriceChange}
+                placeholder="Price"
+                required
+            />
+
+            <TextArea
+                label="Description: "
+                value={description}
+                onChange={onDescriptionChange}
+                placeholder="Description"
+                required
+            />
+
+            <Input
+                label="Seating: "
+                type="number"
+                value={seating}
+                onChange={onSeatingChange}
+                placeholder="Seating"
+                required
+            />
+
+            <Input
+                label="Latitude: "
+                type="number"
+                value={lat}
+                onChange={onLatChange}
+                placeholder="Latitude"
+                required
+            />
+
+            <Input
+                label="Longitude: "
+                type="number"
+                value={lng}
+                onChange={onLngChange}
+                placeholder="Longitude"
+                required
+            />
 
             <button>Create Bench</button>
-
-            <ul>
-                {errors.map((error, i) => (
-                    <li key={i}>{error}</li>
-                ))}
-            </ul>
         </form>
     )
 }
